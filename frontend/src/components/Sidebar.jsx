@@ -42,13 +42,6 @@ const Sidebar = ({ activeView, setActiveView }) => {
           <span>List Employees</span>
         </button>
       </nav>
-
-      {/* Footer */}
-      <div className="p-6 border-t border-slate-700">
-        <div className="p-4 bg-slate-700/30 border border-slate-600 rounded-lg">
-          <p className="text-xs text-slate-400 text-center font-medium">Professional Employee Management</p>
-        </div>
-      </div>
     </div>
   );
 };
