@@ -41,11 +41,12 @@ const App = () => {
       await EmployeeService.createEmployee(employeeData);
       setMessage("Employee added successfully!");
       setMessageType("success");
-      loadEmployees();
+      await loadEmployees();
       setActiveView("view");
     } catch (error) {
       setMessage("Error adding employee: " + error.message);
       setMessageType("error");
+      throw error; // Re-throw to let form know submission failed
     }
   };
 
@@ -54,7 +55,7 @@ const App = () => {
       await EmployeeService.deleteEmployee(id);
       setMessage("Employee deleted successfully!");
       setMessageType("success");
-      loadEmployees();
+      await loadEmployees();
     } catch (error) {
       setMessage("Error deleting employee: " + error.message);
       setMessageType("error");

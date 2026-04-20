@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { User, Mail, Briefcase, AlertCircle, CheckCircle, Send } from "lucide-react";
+import { User, Mail, Briefcase, AlertCircle, CheckCircle, Send, Loader } from "lucide-react";
 
 const EmployeeForm = ({ onSubmit }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -16,10 +17,19 @@ const EmployeeForm = ({ onSubmit }) => {
       return;
     }
 
-    onSubmit({ name, email, role });
-    setName("");
-    setEmail("");
-    setRole("");
+    setLoading(true);
+    try {
+      await onSubmit({ name, email, role });
+      // Only clear fields on successful submission
+      setName("");
+      setEmail("");
+      setRole("");
+    } catch (err) {
+      // Error is handled by parent component, but we still handle it locally
+      console.error("Form submission error:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -43,8 +53,9 @@ const EmployeeForm = ({ onSubmit }) => {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          disabled={loading}
           placeholder="Enter employee name"
-          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm"
+          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm disabled:bg-slate-100 disabled:cursor-not-allowed disabled:text-slate-600"
         />
       </div>
 
@@ -60,8 +71,9 @@ const EmployeeForm = ({ onSubmit }) => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          disabled={loading}
           placeholder="employee@example.com"
-          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm"
+          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm disabled:bg-slate-100 disabled:cursor-not-allowed disabled:text-slate-600"
         />
       </div>
 
@@ -77,18 +89,29 @@ const EmployeeForm = ({ onSubmit }) => {
           type="text"
           value={role}
           onChange={(e) => setRole(e.target.value)}
+          disabled={loading}
           placeholder="e.g., Software Engineer, Manager"
-          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm"
+          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm disabled:bg-slate-100 disabled:cursor-not-allowed disabled:text-slate-600"
         />
       </div>
 
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-blue-600 transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl mt-8"
+        disabled={loading}
+        className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-blue-600 transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl mt-8 disabled:from-blue-400 disabled:to-blue-400 disabled:cursor-not-allowed disabled:opacity-75"
       >
-        <Send size={20} />
-        <span>Add Employee</span>
+        {loading ? (
+          <>
+            <Loader size={20} className="animate-spin" />
+            <span>Adding Employee...</span>
+          </>
+        ) : (
+          <>
+            <Send size={20} />
+            <span>Add Employee</span>
+          </>
+        )}
       </button>
     </form>
   );
