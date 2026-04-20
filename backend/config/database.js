@@ -3,17 +3,16 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/employee-management';
+const MONGODB_URI = process.env.MONGODB_URI;
 
 export const connectDatabase = async () => {
     try {
         await mongoose.connect(MONGODB_URI);
-        console.log('Database connected');
+        console.log('Database connected to MongoDB');
     } catch (error) {
-        console.error('Database error:', error.message);
+        console.error('MongoDB connection failed:', error.message);
         process.exit(1);
     }
 };
 
 export default mongoose.connection;
-

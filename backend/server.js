@@ -24,11 +24,9 @@ const startServer = async () => {
             console.log(`Server running on http://localhost:${PORT}`);
         });
     } catch (error) {
-        console.error('Server error:', error);
+        console.error('Server failed to start:', error.message);
         process.exit(1);
     }
 };
 
 startServer();
-
-export default app;
