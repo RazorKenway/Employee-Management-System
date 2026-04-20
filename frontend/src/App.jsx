@@ -1,121 +1,80 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React, { useState, useEffect } from "react";
+import Sidebar from "./components/Sidebar";
+import EmployeeForm from "./components/EmployeeForm";
+import EmployeeList from "./components/EmployeeList";
+import EmployeeService from "./services/employeeService";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [employees, setEmployees] = useState([]);
+  const [message, setMessage] = useState("");
+  const [activeView, setActiveView] = useState("add"); // 'add' or 'view'
+
+  useEffect(() => {
+    loadEmployees();
+  }, []);
+
+  const loadEmployees = async () => {
+    try {
+      const data = await EmployeeService.getAllEmployees();
+      setEmployees(data);
+    } catch (error) {
+      setMessage("Error loading employees: " + error.message);
+    }
+  };
+
+  const handleAddEmployee = async (employeeData) => {
+    try {
+      await EmployeeService.createEmployee(employeeData);
+      setMessage("Employee added successfully!");
+      loadEmployees();
+      setActiveView("view");
+    } catch (error) {
+      setMessage("Error adding employee: " + error.message);
+    }
+  };
+
+  const handleDeleteEmployee = async (id) => {
+    if (window.confirm("Are you sure?")) {
+      try {
+        await EmployeeService.deleteEmployee(id);
+        setMessage("Employee deleted successfully!");
+        loadEmployees();
+      } catch (error) {
+        setMessage("Error deleting employee: " + error.message);
+      }
+    }
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="flex min-h-screen bg-gray-100">
+      <Sidebar activeView={activeView} setActiveView={setActiveView} />
 
-      <div className="ticks"></div>
+      {/* Main Content */}
+      <div className="flex-1 p-8">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl font-bold mb-6">Employee Management System</h2>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+          {message && <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-blue-800">{message}</div>}
+
+          {/* Add Employee View */}
+          {activeView === "add" && (
+            <div className="bg-white p-8 rounded-lg shadow">
+              <h3 className="text-2xl font-bold mb-6">Add New Employee</h3>
+              <EmployeeForm onSubmit={handleAddEmployee} />
+            </div>
+          )}
+
+          {/* View Employees View */}
+          {activeView === "view" && (
+            <div className="bg-white p-8 rounded-lg shadow">
+              <h3 className="text-2xl font-bold mb-6">All Employees ({employees.length})</h3>
+              <EmployeeList employees={employees} onDelete={handleDeleteEmployee} />
+            </div>
+          )}
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      </div>
+    </div>
+  );
+};
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-}
-
-export default App
+export default App;
