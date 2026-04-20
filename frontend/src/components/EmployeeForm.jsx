@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { User, Mail, Briefcase, AlertCircle, CheckCircle, Send } from "lucide-react";
 
 const EmployeeForm = ({ onSubmit }) => {
   const [name, setName] = useState("");
@@ -22,44 +23,72 @@ const EmployeeForm = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {error && <div className="p-4 bg-red-50 text-red-700 rounded-lg border border-red-200">{error}</div>}
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
+      {error && (
+        <div className="p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
+          <AlertCircle size={20} className="text-red-600 flex-shrink-0 mt-0.5" />
+          <p className="text-red-700 font-semibold">{error}</p>
+        </div>
+      )}
 
+      {/* Name Field */}
       <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-2">Name *</label>
+        <label className="block text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+          <div className="p-1.5 bg-blue-100 rounded-lg">
+            <User size={16} className="text-blue-600" />
+          </div>
+          Full Name <span className="text-red-500">*</span>
+        </label>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter employee name"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm"
         />
       </div>
 
+      {/* Email Field */}
       <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
+        <label className="block text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+          <div className="p-1.5 bg-blue-100 rounded-lg">
+            <Mail size={16} className="text-blue-600" />
+          </div>
+          Email Address <span className="text-red-500">*</span>
+        </label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter employee email"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="employee@example.com"
+          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm"
         />
       </div>
 
+      {/* Role Field */}
       <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-2">Role *</label>
+        <label className="block text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+          <div className="p-1.5 bg-blue-100 rounded-lg">
+            <Briefcase size={16} className="text-blue-600" />
+          </div>
+          Job Title <span className="text-red-500">*</span>
+        </label>
         <input
           type="text"
           value={role}
           onChange={(e) => setRole(e.target.value)}
-          placeholder="Enter employee role"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="e.g., Software Engineer, Manager"
+          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm"
         />
       </div>
 
-      <button type="submit" className="w-full px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
-        Add Employee
+      {/* Submit Button */}
+      <button
+        type="submit"
+        className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-blue-600 transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl mt-8"
+      >
+        <Send size={20} />
+        <span>Add Employee</span>
       </button>
     </form>
   );

@@ -1,1 +1,156 @@
 @import "tailwindcss";
+
+/* Professional styling and animations */
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --slate-900: #0f172a;
+  --slate-800: #1e293b;
+  --slate-50: #f8fafc;
+}
+
+* {
+  @apply scroll-smooth;
+}
+
+body {
+  @apply font-sans antialiased;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-subtle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-in {
+  animation: slideInFromTop 0.3s ease-out;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.slide-in-from-top-2 {
+  animation: slideInFromTop 0.3s ease-out;
+}
+
+.slide-in-from-left {
+  animation: slideInFromLeft 0.3s ease-out;
+}
+
+/* Focus styles for better accessibility */
+input:focus,
+button:focus,
+textarea:focus {
+  @apply outline-none;
+}
+
+/* Button base styles */
+button {
+  @apply transition-all duration-200;
+}
+
+/* Input field enhancements */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  @apply transition-all duration-200;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+  @apply ring-2 ring-blue-500 ring-offset-0 border-blue-500;
+}
+
+/* Card hover effect */
+.card-hover {
+  @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+}
+
+/* Gradient text */
+.gradient-text {
+  @apply bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent;
+}
+
+/* Professional shadow */
+.shadow-professional {
+  @apply shadow-lg;
+}
+
+/* Link hover effects */
+a {
+  @apply transition-colors duration-200;
+}
+
+/* Loading animation */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
